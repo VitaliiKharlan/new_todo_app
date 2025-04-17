@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "888341347385",
+    "project_id": "new-todo-edf23",
+    "storage_bucket": "new-todo-edf23.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888341347385:android:971fe38ebd40c478b5e1e8",
+        "android_client_info": {
+          "package_name": "com.example.new_todo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxPLiXgqCrP3bveOKa3Vu5r4G6H-7EbmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,16 +1,53 @@
-# new_todo_app
+# todo_app
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+# how to change native splash
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+flutter clean
+flutter pub get
+flutter pub run flutter_native_splash:create
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+dart run flutter_native_splash:create --path=flutter_native_splash.yaml
+
+
+# how to change launcher icon
+
+flutter pub get
+flutter pub run flutter_launcher_icons
+
+
+# how to run build_runner
+
+flutter packages pub run build_runner watch
+dart run build_runner build --delete-conflicting-outputs
+
+# how to clean and rerun the build using build tools
+flutter clean
+dart run build_runner clean
+
+
+# how to run auto_route
+
+// If you want the generator to run one time and exit, use
+
+
+// Use the [watch] flag to watch the files' system for edits and rebuild as necessary.
+flutter packages pub run build_runner watch
+
+
+# how to add a commit
+
+git commit -m "add readme"
+git add .
+git commit -m "add readme"
+git branch -M main
+git push -u main
+
+# how to update local repository after making change on remote
+# (for example creating new branch by another user)
+
+git fetch
