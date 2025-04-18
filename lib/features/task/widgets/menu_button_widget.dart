@@ -6,12 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cubits/theme_cubit/theme_cubit.dart';
 import '../../../core/enums/sorting_options_enum.dart';
 
-
-
 class MenuButtonWidget extends StatelessWidget {
-  const MenuButtonWidget({
-    super.key,
-  });
+  const MenuButtonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +50,7 @@ class MenuButtonWidget extends StatelessWidget {
                   ],
                 ),
                 onTap: () {
-                  _setThemeBrightness(
-                    brightnessValue,
-                    brightnessValueIsLight,
-                  );
+                  _setThemeBrightness(brightnessValue, brightnessValueIsLight);
                 },
               ),
               PopupMenuItem<String>(
@@ -114,21 +107,24 @@ class MenuButtonWidget extends StatelessWidget {
     );
   }
 
-  void printTextStyle(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.labelMedium;
-
-    debugPrint('Font size: ${textStyle?.fontSize}');
-    debugPrint('Font weight: ${textStyle?.fontWeight}');
-    debugPrint('Font style: ${textStyle?.fontStyle}');
-    debugPrint('Color: ${textStyle?.color}');
-    debugPrint('Letter spacing: ${textStyle?.letterSpacing}');
-    debugPrint('Height: ${textStyle?.height}');
-  }
+  // void printTextStyle(BuildContext context) {
+  //   final textStyle = Theme.of(context).textTheme.labelMedium;
+  //
+  //   debugPrint('Font size: ${textStyle?.fontSize}');
+  //   debugPrint('Font weight: ${textStyle?.fontWeight}');
+  //   debugPrint('Font style: ${textStyle?.fontStyle}');
+  //   debugPrint('Color: ${textStyle?.color}');
+  //   debugPrint('Letter spacing: ${textStyle?.letterSpacing}');
+  //   debugPrint('Height: ${textStyle?.height}');
+  // }
 
   void _setThemeBrightness(
-      ThemeCubit brightnessValue, bool brightnessValueIsLight) {
+    ThemeCubit brightnessValue,
+    bool brightnessValueIsLight,
+  ) {
     brightnessValue.setThemeBrightness(
-        brightnessValueIsLight ? Brightness.dark : Brightness.light);
+      brightnessValueIsLight ? Brightness.dark : Brightness.light,
+    );
   }
 
   void _showSortingSubMenu(BuildContext context) {
@@ -177,18 +173,20 @@ class MenuButtonWidget extends StatelessWidget {
   }
 
   PopupMenuItem<String> _buildSortingMenuItem(
-      BuildContext context, String label, SortingOptionsEnum option, IconData icon) {
+    BuildContext context,
+    String label,
+    SortingOptionsEnum option,
+    IconData icon,
+  ) {
     final theme = Theme.of(context);
+
     return PopupMenuItem<String>(
       value: label,
       child: Row(
         children: [
           Icon(icon, size: 20),
           SizedBox(width: 8),
-          Text(
-            label,
-            style: theme.textTheme.labelMedium,
-          ),
+          Text(label, style: theme.textTheme.labelMedium),
         ],
       ),
       onTap: () {

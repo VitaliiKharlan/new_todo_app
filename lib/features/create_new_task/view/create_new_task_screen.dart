@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_todo_app/core/enums/task_types_enum.dart';
 
+import '../../../core/enums/task_types_enum.dart';
+import '../../location_search/data/models/location_details.dart';
 import '../bloc/tasks_bloc.dart';
-import '../data/models/task_entity.dart';
+import '../data/models/task_dto.dart';
+import '../widgets/task_deadline_field_widget.dart';
+import '../widgets/task_description_field_widget.dart';
+import '../widgets/task_location_field_widget.dart';
 import '../widgets/task_name_field_widget.dart';
-
-
+import '../widgets/task_priority_field_widget.dart';
+import '../widgets/task_remind_time_field_widget.dart';
+import '../widgets/task_type_field_widget.dart';
 
 @RoutePage()
 class CreateNewTaskScreen extends StatefulWidget {
-  const CreateNewTaskScreen({
-    super.key,
-    this.editTask,
-  });
+  const CreateNewTaskScreen({super.key, this.editTask});
 
-  final Task? editTask;
+  final TaskDto? editTask;
 
   @override
   _CreateNewTaskScreenState createState() => _CreateNewTaskScreenState();
@@ -30,23 +32,25 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
   DateTime? _selectedDeadline;
   TaskTypesEnum? _selectedTaskType;
   int? _taskPriority;
-  // LocationDetailsModel? _taskLocation;
+  LocationDetailsModel? _taskLocation;
   List<DateTime>? _selectedRemindTime;
 
   @override
   void initState() {
     super.initState();
 
-    controllerTaskTitle =
-        TextEditingController(text: widget.editTask?.taskTitle ?? '');
-    _controllerTaskDescription =
-        TextEditingController(text: widget.editTask?.taskDescription ?? '');
+    controllerTaskTitle = TextEditingController(
+      text: widget.editTask?.taskTitle ?? '',
+    );
+    _controllerTaskDescription = TextEditingController(
+      text: widget.editTask?.taskDescription ?? '',
+    );
 
     _selectedDeadline = widget.editTask?.taskDeadline;
     _selectedRemindTime = widget.editTask?.taskRemindTime;
     _selectedTaskType = widget.editTask?.taskType;
     _taskPriority = widget.editTask?.taskPriority;
-    // _taskLocation = widget.editTask?.taskLocation;
+    _taskLocation = widget.editTask?.taskLocation;
   }
 
   void _clearInputFields() {
@@ -58,7 +62,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
       _selectedRemindTime = null;
       _selectedTaskType = null;
       _taskPriority = null;
-      // _taskLocation = null;
+      _taskLocation = null;
     });
   }
 
@@ -69,7 +73,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     final taskPriority = _taskPriority;
     final taskDeadline = _selectedDeadline;
     final taskDescription = _controllerTaskDescription.text.trim();
-    // final taskLocation = _taskLocation;
+    final taskLocation = _taskLocation;
     final taskRemindTime = _selectedRemindTime;
 
     final tabsRouter = context.tabsRouter;
@@ -83,27 +87,31 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
 
     if (widget.editTask == null) {
       // Create New Task
-      bloc.add(AddTaskEvent(
-        taskTitle,
-        taskType,
-        taskPriority,
-        taskDeadline,
-        taskDescription,
-        // taskLocation,
-        taskRemindTime,
-      ));
+      bloc.add(
+        AddTaskEvent(
+          taskTitle,
+          taskType,
+          taskPriority,
+          taskDeadline,
+          taskDescription,
+          taskLocation,
+          taskRemindTime,
+        ),
+      );
     } else {
       // Edit Task
-      bloc.add(EditTaskEvent(
-        oldTask: widget.editTask!,
-        taskTitle: controllerTaskTitle.text.trim(),
-        taskType: _selectedTaskType,
-        taskPriority: _taskPriority,
-        taskDeadline: _selectedDeadline,
-        taskDescription: _controllerTaskDescription.text.trim(),
-        // taskLocation: _taskLocation,
-        taskRemindTime: _selectedRemindTime,
-      ));
+      bloc.add(
+        EditTaskEvent(
+          oldTask: widget.editTask!,
+          taskTitle: controllerTaskTitle.text.trim(),
+          taskType: _selectedTaskType,
+          taskPriority: _taskPriority,
+          taskDeadline: _selectedDeadline,
+          taskDescription: _controllerTaskDescription.text.trim(),
+          taskLocation: _taskLocation,
+          taskRemindTime: _selectedRemindTime,
+        ),
+      );
     }
 
     _clearInputFields();
@@ -121,7 +129,9 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     if (picked != null && picked != _selectedDeadline) {
       setState(() {
         _selectedDeadline = picked.copyWith(
-            hour: _selectedDeadline?.hour, minute: _selectedDeadline?.minute);
+          hour: _selectedDeadline?.hour,
+          minute: _selectedDeadline?.minute,
+        );
       });
     }
   }
@@ -129,9 +139,10 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedDeadline != null
-          ? TimeOfDay.fromDateTime(_selectedDeadline!)
-          : TimeOfDay.now(),
+      initialTime:
+          _selectedDeadline != null
+              ? TimeOfDay.fromDateTime(_selectedDeadline!)
+              : TimeOfDay.now(),
     );
     if (picked != null) {
       setState(() {
@@ -157,18 +168,19 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     }
   }
 
-  // void onLocationPicked(LocationDetailsModel? taskLocation) {
-  //   setState(() {
-  //     _taskLocation = taskLocation;
-  //   });
-  // }
+  void onLocationPicked(LocationDetailsModel? taskLocation) {
+    setState(() {
+      _taskLocation = taskLocation;
+    });
+  }
 
   Future<void> _selectRemindDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedRemindTime?.isNotEmpty ?? false
-          ? _selectedRemindTime!.first
-          : DateTime.now(),
+      initialDate:
+          _selectedRemindTime?.isNotEmpty ?? false
+              ? _selectedRemindTime!.first
+              : DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2101),
     );
@@ -176,14 +188,18 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     if (picked != null) {
       setState(() {
         _selectedRemindTime ??= [];
-        _selectedRemindTime!.add(picked.copyWith(
-          hour: _selectedRemindTime?.isNotEmpty == true
-              ? _selectedRemindTime!.last.hour
-              : DateTime.now().hour,
-          minute: _selectedRemindTime?.isNotEmpty == true
-              ? _selectedRemindTime!.last.minute
-              : DateTime.now().minute,
-        ));
+        _selectedRemindTime!.add(
+          picked.copyWith(
+            hour:
+                _selectedRemindTime?.isNotEmpty == true
+                    ? _selectedRemindTime!.last.hour
+                    : DateTime.now().hour,
+            minute:
+                _selectedRemindTime?.isNotEmpty == true
+                    ? _selectedRemindTime!.last.minute
+                    : DateTime.now().minute,
+          ),
+        );
       });
     }
   }
@@ -192,9 +208,9 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime:
-      _selectedRemindTime != null && _selectedRemindTime!.isNotEmpty
-          ? TimeOfDay.fromDateTime(_selectedRemindTime!.last)
-          : TimeOfDay.now(),
+          _selectedRemindTime != null && _selectedRemindTime!.isNotEmpty
+              ? TimeOfDay.fromDateTime(_selectedRemindTime!.last)
+              : TimeOfDay.now(),
     );
     if (picked != null) {
       setState(() {
@@ -266,11 +282,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          top: 12,
-          right: 20,
-        ),
+        padding: const EdgeInsets.only(left: 20, top: 12, right: 20),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -279,82 +291,80 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 20),
-                  TaskNameFieldWidget(
-                    controllerTaskTitle: controllerTaskTitle,
+                  TaskNameFieldWidget(controllerTaskTitle: controllerTaskTitle),
+                  SizedBox(height: 20),
+                  TaskTypeFieldWidget(
+                    selectedTaskType: _selectedTaskType,
+                    onTaskTypeSelected: (TaskTypesEnum type) {
+                      setState(() {
+                        _selectedTaskType = type;
+                      });
+                    },
                   ),
                   SizedBox(height: 20),
-                  // TaskTypeFieldWidget(
-                  //   selectedTaskType: _selectedTaskType,
-                  //   onTaskTypeSelected: (TaskType type) {
-                  //     setState(() {
-                  //       _selectedTaskType = type;
-                  //     });
-                  //   },
-                  // ),
-            //       SizedBox(height: 20),
-            //       TaskPriorityFieldWidget(
-            //         taskPriority: _taskPriority,
-            //         onSelectedTaskPriority: (newPriority) {
-            //           setState(() {
-            //             _taskPriority = newPriority;
-            //           });
-            //         },
-            //       ),
-            //       SizedBox(height: 20),
-            //       TaskDeadlineFieldWidget(
-            //         selectedDeadline: _selectedDeadline,
-            //         onSelectedDeadlineDate: () => _selectDate(context),
-            //         onSelectedDeadlineTime: () => _selectTime(context),
-            //       ),
-            //       SizedBox(height: 20),
-            //     ],
-            //   ),
-            // ),
-            // SliverFillRemaining(
-            //   hasScrollBody: false,
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       TaskDescriptionFieldWidget(
-            //         controllerTaskDescription: _controllerTaskDescription,
-            //       ),
-            //       SizedBox(height: 20),
-            //       TaskLocationFieldWidget(
-            //         taskLocation: _taskLocation,
-            //         onLocationPicked: onLocationPicked,
-            //       ),
-            //       SizedBox(height: 20),
-            //       TaskRemindDateTimeFieldWidget(
-            //         selectedRemindDateTime: _selectedRemindTime,
-            //         onSelectedRemindDate: () => _selectRemindDate(context),
-            //         onSelectedRemindTime: () => _selectRemindTime(context),
-            //       ),
-            //       SizedBox(height: 20),
-            //       SizedBox(
-            //         width: double.infinity,
-            //         height: 56,
-            //         child: ElevatedButton(
-            //           onPressed: () => _addTodo(bloc),
-            //           style: ElevatedButton.styleFrom(
-            //             textStyle: TextStyle(fontSize: 18),
-            //             foregroundColor: Color(0xFFFFFFFF),
-            //             backgroundColor: Color(0xFF2196F3),
-            //           ).copyWith(
-            //             shape: WidgetStateProperty.all(
-            //               RoundedRectangleBorder(
-            //                 borderRadius: BorderRadius.circular(12),
-            //               ),
-            //             ),
-            //           ),
-            //           child: Text(
-            //             widget.editTask == null
-            //                 ? 'Create Task'
-            //                 : 'Save Changes',
-            //             style: theme.textTheme.headlineLarge,
-            //           ),
-            //         ),
-            //       ),
+                  TaskPriorityFieldWidget(
+                    taskPriority: _taskPriority,
+                    onSelectedTaskPriority: (newPriority) {
+                      setState(() {
+                        _taskPriority = newPriority;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  TaskDeadlineFieldWidget(
+                    selectedDeadline: _selectedDeadline,
+                    onSelectedDeadlineDate: () => _selectDate(context),
+                    onSelectedDeadlineTime: () => _selectTime(context),
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TaskDescriptionFieldWidget(
+                    controllerTaskDescription: _controllerTaskDescription,
+                  ),
+                  SizedBox(height: 20),
+                  TaskLocationFieldWidget(
+                    taskLocation: _taskLocation,
+                    onLocationPicked: onLocationPicked,
+                  ),
+                  SizedBox(height: 20),
+                  TaskRemindDateTimeFieldWidget(
+                    selectedRemindDateTime: _selectedRemindTime,
+                    onSelectedRemindDate: () => _selectRemindDate(context),
+                    onSelectedRemindTime: () => _selectRemindTime(context),
+                  ),
+                  SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: () => _addTodo(bloc),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle(fontSize: 18),
+                        foregroundColor: Color(0xFFFFFFFF),
+                        backgroundColor: Color(0xFF2196F3),
+                      ).copyWith(
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        widget.editTask == null
+                            ? 'Create Task'
+                            : 'Save Changes',
+                        style: theme.textTheme.headlineLarge,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 20),
                 ],
               ),

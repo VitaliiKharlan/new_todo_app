@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/gestures.dart';
 
-import '../../create_new_task/data/models/task_entity.dart';
+import '../../create_new_task/data/models/task_dto.dart';
 
 class OverviewWidget extends StatefulWidget {
   const OverviewWidget({super.key, required this.task});
 
-  final Task task;
+  final TaskDto task;
 
   @override
   State<OverviewWidget> createState() => _OverviewWidgetState();
@@ -82,6 +82,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
 
                   String displayText = fullText;
                   if (!_isExpanded && isOverflowing) {
+                    // displayText = 'something new';
                     displayText = _getTrimmedText(
                       text: fullText,
                       style: textStyle,

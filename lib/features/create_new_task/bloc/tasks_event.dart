@@ -12,7 +12,7 @@ class AddTaskEvent extends TasksEvent {
       this.taskPriority,
       this.taskDeadline,
       this.taskDescription,
-      // this.taskLocation,
+      this.taskLocation,
       this.taskRemindTime,
       );
 
@@ -21,7 +21,7 @@ class AddTaskEvent extends TasksEvent {
   final int? taskPriority;
   final DateTime? taskDeadline;
   final String? taskDescription;
-  // final LocationDetailsModel? taskLocation;
+  final LocationDetailsModel? taskLocation;
   final List<DateTime>? taskRemindTime;
 }
 
@@ -30,7 +30,7 @@ class DeleteTaskEvent extends TasksEvent {
       this.taskDelete,
       );
 
-  final Task taskDelete;
+  final TaskDto taskDelete;
 }
 
 class EditTaskEvent extends TasksEvent {
@@ -41,17 +41,17 @@ class EditTaskEvent extends TasksEvent {
     this.taskPriority,
     this.taskDeadline,
     this.taskDescription,
-    // this.taskLocation,
+    this.taskLocation,
     this.taskRemindTime,
   });
 
-  final Task oldTask;
+  final TaskDto oldTask;
   final String taskTitle;
   final TaskTypesEnum? taskType;
   final int? taskPriority;
   final DateTime? taskDeadline;
   final String? taskDescription;
-  // final LocationDetailsModel? taskLocation;
+  final LocationDetailsModel? taskLocation;
   final List<DateTime>? taskRemindTime;
 }
 

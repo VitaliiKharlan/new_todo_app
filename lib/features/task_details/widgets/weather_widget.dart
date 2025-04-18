@@ -6,7 +6,7 @@
 //
 // import '../../../core/theme/app_colors.dart';
 // import '../../../core/theme/app_images.dart';
-// import '../../create_new_task/data/models/task_entity.dart';
+// import '../../create_new_task/data/models/task_dto.dart';
 //
 // class WeatherWidget extends StatefulWidget {
 //   const WeatherWidget({super.key, required this.task});

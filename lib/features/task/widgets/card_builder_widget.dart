@@ -2,23 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-
-
-
+import '../../../core/router/router.dart';
 import '../../create_new_task/bloc/tasks_bloc.dart';
-import '../../create_new_task/data/models/task_entity.dart';
+import '../../create_new_task/data/models/task_dto.dart';
 import 'task_list_card_widget.dart';
 
 class CardBuilderWidget extends StatelessWidget {
-  const CardBuilderWidget({
-    super.key,
-    required this.tasks,
-  });
+  const CardBuilderWidget({super.key, required this.tasks});
 
-  final List<Task> tasks;
+  final List<TaskDto> tasks;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +23,7 @@ class CardBuilderWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final task = tasks[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Slidable(
@@ -43,22 +34,14 @@ class CardBuilderWidget extends StatelessWidget {
                 children: [
                   SlidableAction(
                     onPressed: (_) {
-                      // context.pushRoute(
-                      //   CreateNewTaskRoute(
-                      //     editTask: task,
-                      //   ),
-                      // );
+                      context.pushRoute(CreateNewTaskRoute(editTask: task));
                     },
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
                     icon: Icons.edit,
                     label: 'Edit',
                     spacing: 8,
-                    padding: EdgeInsets.only(
-                      left: 4,
-                      top: 12,
-                      right: 4,
-                    ),
+                    padding: EdgeInsets.only(left: 4, top: 12, right: 4),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   SlidableAction(
@@ -73,7 +56,7 @@ class CardBuilderWidget extends StatelessWidget {
                             ),
                             content: Text(
                               'Do you really want '
-                                  '\nto delete this task?',
+                              '\nto delete this task?',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: Colors.black,
                               ),
@@ -90,9 +73,9 @@ class CardBuilderWidget extends StatelessWidget {
                                 child: Text('Yes'),
                                 onPressed: () {
                                   dialogContext.router.maybePop();
-                                  context
-                                      .read<TasksBloc>()
-                                      .add(DeleteTaskEvent(task));
+                                  context.read<TasksBloc>().add(
+                                    DeleteTaskEvent(task),
+                                  );
                                 },
                               ),
                             ],
@@ -105,18 +88,12 @@ class CardBuilderWidget extends StatelessWidget {
                     icon: Icons.delete,
                     label: 'Delete',
                     spacing: 8,
-                    padding: EdgeInsets.only(
-                      left: 4,
-                      top: 12,
-                      right: 4,
-                    ),
+                    padding: EdgeInsets.only(left: 4, top: 12, right: 4),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ],
               ),
-              child: TaskListCardWidget(
-                task: task,
-              ),
+              child: TaskListCardWidget(task: task),
             ),
           ),
         );

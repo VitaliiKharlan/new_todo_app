@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
-import '../../features/create_new_task/data/models/task_entity.dart';
+import '../../features/create_new_task/data/models/task_dto.dart';
 import '../../features/create_new_task/view/create_new_task_screen.dart';
 import '../../features/focus/view/focus_screen.dart';
 import '../../features/home/view/home_screen.dart';

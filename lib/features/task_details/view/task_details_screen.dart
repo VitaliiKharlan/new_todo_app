@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
-import '../../create_new_task/data/models/task_entity.dart';
+import '../../create_new_task/data/models/task_dto.dart';
 import '../widgets/main_information_widget.dart';
 import '../widgets/overview_widget.dart';
 import '../widgets/project_milestone_widget.dart';
@@ -15,8 +15,8 @@ class TaskDetailsScreen extends StatefulWidget {
     required this.onDelete,
   });
 
-  final Task task;
-  final void Function(Task) onDelete;
+  final TaskDto task;
+  final void Function(TaskDto) onDelete;
 
   @override
   State<TaskDetailsScreen> createState() => _TaskDetailsScreenState();

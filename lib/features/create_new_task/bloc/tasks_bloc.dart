@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:new_todo_app/core/enums/sorting_options_enum.dart';
-import 'package:new_todo_app/core/enums/task_types_enum.dart';
-
 import 'package:uuid/uuid.dart';
 
-
-
-import '../data/models/task_entity.dart';
+import '../../../core/enums/sorting_options_enum.dart';
+import '../../../core/enums/task_types_enum.dart';
+import '../../location_search/data/models/location_details.dart';
+import '../data/models/task_dto.dart';
 import '../data/repositories/task_repository.dart';
 
 part 'tasks_event.dart';
@@ -18,7 +16,7 @@ part 'tasks_state.dart';
 
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
   final TaskRepository taskRepository;
-  List<Task> _displayedTasks = [];
+  List<TaskDto> _displayedTasks = [];
   SortingOptionsEnum _currentSortingOption = SortingOptionsEnum.createAtLastToFirst;
 
   void _sortTasksByCurrentOption() {
@@ -71,7 +69,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         debugPrint('Fetched ${tasksData.length} tasks');
       }
 
-      final tasks = tasksData.map((data) => Task.fromMap(data)).toList();
+      final tasks = tasksData.map((data) => TaskDto.fromMap(data)).toList();
       tasks.sort((a, b) => b.taskCreatedAt.compareTo(a.taskCreatedAt));
       _displayedTasks = tasks;
       _sortTasksByCurrentOption();
@@ -88,15 +86,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     try {
       debugPrint('Add Tasks Event');
 
-      List<Task> tasks = [];
-      final newTask = Task(
+      List<TaskDto> tasks = [];
+      final newTask = TaskDto(
         taskId: Uuid().v4(),
         taskTitle: event.taskTitle,
         taskType: event.taskType,
         taskPriority: event.taskPriority,
         taskDeadline: event.taskDeadline,
         taskDescription: event.taskDescription,
-        // taskLocation: event.taskLocation,
+        taskLocation: event.taskLocation,
         taskRemindTime: event.taskRemindTime,
       );
 
@@ -160,7 +158,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           taskPriority: event.taskPriority,
           taskDeadline: event.taskDeadline,
           taskDescription: event.taskDescription,
-          // taskLocation: event.taskLocation,
+          taskLocation: event.taskLocation,
           taskRemindTime: event.taskRemindTime,
         );
 

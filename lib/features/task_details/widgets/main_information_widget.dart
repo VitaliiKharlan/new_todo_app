@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 
 
-import '../../create_new_task/data/models/task_entity.dart';
+import '../../create_new_task/data/models/task_dto.dart';
 import 'in_progress_indicator_widget.dart';
 
 class MainInformation extends StatefulWidget {
@@ -14,7 +14,7 @@ class MainInformation extends StatefulWidget {
     required this.task,
   });
 
-  final Task task;
+  final TaskDto task;
 
   @override
   State<MainInformation> createState() => _MainInformationState();

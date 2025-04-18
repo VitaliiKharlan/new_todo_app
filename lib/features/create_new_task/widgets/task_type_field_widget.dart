@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:new_todo_app/core/enums/task_types_enum.dart';
 
-
-
+import '../../../core/enums/task_types_enum.dart';
 
 class TaskTypeFieldWidget extends StatefulWidget {
   const TaskTypeFieldWidget({
@@ -44,42 +42,43 @@ class _TaskTypeFieldWidgetState extends State<TaskTypeFieldWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Category',
-          style: theme.textTheme.titleLarge,
-        ),
+        Text('Category', style: theme.textTheme.titleLarge),
         SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: TaskTypesEnum.values.take(5).map((TaskTypesEnum type) {
-            return Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _selectedTaskType == type
-                      ? Colors.blue
-                      : Colors.blue[100],
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                ).copyWith(
-                  shape: WidgetStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+          children:
+              TaskTypesEnum.values.take(5).map((TaskTypesEnum type) {
+                return Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          _selectedTaskType == type
+                              ? Colors.blue
+                              : Colors.blue[100],
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                    ).copyWith(
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      _onTaskTypeSelected(type);
+                    },
+                    child: Text(
+                      type.name,
+                      style: TextStyle(
+                        color:
+                            _selectedTaskType == type
+                                ? Colors.white
+                                : Colors.black,
+                        fontSize: 8,
+                      ),
                     ),
                   ),
-                ),
-                onPressed: () {
-                  _onTaskTypeSelected(type);
-                },
-                child: Text(
-                  type.name,
-                  style: TextStyle(
-                    color:
-                    _selectedTaskType == type ? Colors.white : Colors.black,
-                    fontSize: 8,
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
+                );
+              }).toList(),
         ),
       ],
     );

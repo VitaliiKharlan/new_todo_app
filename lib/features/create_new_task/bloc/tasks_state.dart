@@ -18,7 +18,7 @@ class TasksLoadedState extends TasksState {
       this.tasks,
       );
 
-  final List<Task> tasks;
+  final List<TaskDto> tasks;
 
   @override
   List<Object?> get props => [tasks];

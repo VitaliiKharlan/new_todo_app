@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
-import '../../create_new_task/data/models/task_entity.dart';
+import '../../create_new_task/data/models/task_dto.dart';
 
 class ProjectMilestoneWidget extends StatefulWidget {
   const ProjectMilestoneWidget({super.key, required this.task});
 
-  final Task task;
+  final TaskDto task;
 
   @override
   State<ProjectMilestoneWidget> createState() => _ProjectMilestoneWidgetState();
