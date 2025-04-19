@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../core/enums/sorting_options_enum.dart';
 import '../../../core/enums/task_types_enum.dart';
-import '../../location_search/data/models/location_details.dart';
+import '../../search_location/data/models/location_details.dart';
 import '../data/models/task_dto.dart';
 
 part 'tasks_event.freezed.dart';

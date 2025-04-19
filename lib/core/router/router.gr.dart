@@ -132,22 +132,6 @@ class IndexRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LocationSearchScreen]
-class LocationSearchRoute extends PageRouteInfo<void> {
-  const LocationSearchRoute({List<PageRouteInfo>? children})
-    : super(LocationSearchRoute.name, initialChildren: children);
-
-  static const String name = 'LocationSearchRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const LocationSearchScreen();
-    },
-  );
-}
-
-/// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})
@@ -159,6 +143,22 @@ class ProfileRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ProfileScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SearchLocationScreen]
+class SearchLocationRoute extends PageRouteInfo<void> {
+  const SearchLocationRoute({List<PageRouteInfo>? children})
+    : super(SearchLocationRoute.name, initialChildren: children);
+
+  static const String name = 'SearchLocationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SearchLocationScreen();
     },
   );
 }

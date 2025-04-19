@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../search_location/data/models/location_details.dart';
 import '../../../core/enums/task_types_enum.dart';
-import '../../location_search/data/models/location_details.dart';
 import '../bloc/tasks_bloc.dart';
 import '../bloc/tasks_event.dart';
 import '../data/models/task_dto.dart';
@@ -90,13 +90,13 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
       // Create New Task
       bloc.add(
         TasksEvent.addTask(
-          taskTitle:  taskTitle,
-          taskType:  taskType,
-          taskPriority:  taskPriority,
-          taskDeadline:  taskDeadline,
+          taskTitle: taskTitle,
+          taskType: taskType,
+          taskPriority: taskPriority,
+          taskDeadline: taskDeadline,
           taskDescription: taskDescription,
           taskLocation: taskLocation,
-          taskRemindTime:  taskRemindTime,
+          taskRemindTime: taskRemindTime,
         ),
       );
     } else {

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/enums/task_types_enum.dart';
-import '../../../location_search/data/models/location_details.dart';
+import '../../../search_location/data/models/location_details.dart';
 import '../../widgets/task_progress_indicator.dart';
 
 class TaskDto extends Equatable {

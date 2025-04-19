@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'priority_dialog_widget.dart';
 
-
-
-
 class TaskPriorityFieldWidget extends StatefulWidget {
   const TaskPriorityFieldWidget({
     super.key,
@@ -36,9 +33,7 @@ class _TaskPriorityFieldWidgetState extends State<TaskPriorityFieldWidget> {
     final taskPriority = await showDialog<int?>(
       context: context,
       builder: (BuildContext context) {
-        return PriorityDialogWidget(
-          taskPriority: _taskPriority,
-        );
+        return PriorityDialogWidget(taskPriority: _taskPriority);
       },
     );
 
@@ -58,10 +53,7 @@ class _TaskPriorityFieldWidgetState extends State<TaskPriorityFieldWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Priority',
-          style: theme.textTheme.titleLarge,
-        ),
+        Text('Priority', style: theme.textTheme.titleLarge),
         SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
@@ -79,24 +71,18 @@ class _TaskPriorityFieldWidgetState extends State<TaskPriorityFieldWidget> {
                   widget.taskPriority == null
                       ? 'Pick a priority'
                       : widget.taskPriority.toString(),
-                  style: widget.taskPriority == null
-                      ? theme.textTheme.headlineMedium
-                      : theme.textTheme.headlineLarge,
-
-
+                  style:
+                      widget.taskPriority == null
+                          ? theme.textTheme.headlineMedium
+                          : theme.textTheme.headlineLarge,
                 ),
               ],
             ),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(Color(0xFFFFFFFF)),
-              foregroundColor: WidgetStateProperty.all(
-                Color(0x40000000),
-              ),
+              foregroundColor: WidgetStateProperty.all(Color(0x40000000)),
               side: WidgetStateProperty.all(
-                BorderSide(
-                  color: Color(0x40A9A9A9),
-                  width: 2,
-                ),
+                BorderSide(color: Color(0x40A9A9A9), width: 2),
               ),
               overlayColor: WidgetStateProperty.all<Color>(Color(0xFFFFFFFF)),
               shadowColor: WidgetStateProperty.all<Color>(Color(0xFFFFFFFF)),

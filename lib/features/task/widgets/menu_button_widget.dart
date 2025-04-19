@@ -107,17 +107,6 @@ class MenuButtonWidget extends StatelessWidget {
     );
   }
 
-  // void printTextStyle(BuildContext context) {
-  //   final textStyle = Theme.of(context).textTheme.labelMedium;
-  //
-  //   debugPrint('Font size: ${textStyle?.fontSize}');
-  //   debugPrint('Font weight: ${textStyle?.fontWeight}');
-  //   debugPrint('Font style: ${textStyle?.fontStyle}');
-  //   debugPrint('Color: ${textStyle?.color}');
-  //   debugPrint('Letter spacing: ${textStyle?.letterSpacing}');
-  //   debugPrint('Height: ${textStyle?.height}');
-  // }
-
   void _setThemeBrightness(
     ThemeCubit brightnessValue,
     bool brightnessValueIsLight,

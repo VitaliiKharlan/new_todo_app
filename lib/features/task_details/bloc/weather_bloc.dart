@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-
-
-import '../../location_search/data/models/location_details.dart';
+import '../../search_location/data/models/location_details.dart';
 import '../data/repositories/weather_repository.dart';
 
 part 'weather_event.dart';
@@ -15,14 +13,14 @@ part 'weather_state.dart';
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherRepository _weatherRepository;
 
-  WeatherBloc(
-      this._weatherRepository,
-      ) : super(WeatherInitialState()) {
+  WeatherBloc(this._weatherRepository) : super(WeatherInitialState()) {
     on<WeatherSelectEvent>(_onLocationForWeatherSelect);
   }
 
   Future<void> _onLocationForWeatherSelect(
-      WeatherSelectEvent event, Emitter<WeatherState> emit) async {
+    WeatherSelectEvent event,
+    Emitter<WeatherState> emit,
+  ) async {
     debugPrint('Weather Select Event');
     emit(WeatherLoadingState());
 
@@ -32,29 +30,34 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         lng: event.locationDetailsModel.lng ?? 0.0,
       );
 
-      debugPrint('This Is Success: ${citySearch.localizedName}; '
-          '${citySearch.countryName}; '
-          '${citySearch.locationCityKey} ');
+      debugPrint(
+        'This Is Success: ${citySearch.localizedName}; '
+        '${citySearch.countryName}; '
+        '${citySearch.locationCityKey} ',
+      );
 
       final currentWeather = await _weatherRepository.getCurrentConditions(
         locationCityKey: int.tryParse(citySearch.locationCityKey) ?? 0,
       );
 
       debugPrint(
-          'This Is Success: ${currentWeather.weatherCurrentDescription}; '
-              '${currentWeather.weatherCurrentIcon}; '
-              '${currentWeather.weatherCurrentTemperature.metric.value}; '
-              '${currentWeather.weatherCurrentLocalObservationDateTime} ');
+        'This Is Success: ${currentWeather.weatherCurrentDescription}; '
+        '${currentWeather.weatherCurrentIcon}; '
+        '${currentWeather.weatherCurrentTemperature.metric.value}; '
+        '${currentWeather.weatherCurrentLocalObservationDateTime} ',
+      );
 
-      emit(WeatherSelectedState(
-        citySearch.localizedName,
-        citySearch.countryName,
-        int.tryParse(citySearch.locationCityKey) ?? 0,
-        currentWeather.weatherCurrentDescription,
-        currentWeather.weatherCurrentIcon,
-        currentWeather.weatherCurrentTemperature.metric.value,
-        currentWeather.weatherCurrentLocalObservationDateTime.toLocal(),
-      ));
+      emit(
+        WeatherSelectedState(
+          citySearch.localizedName,
+          citySearch.countryName,
+          int.tryParse(citySearch.locationCityKey) ?? 0,
+          currentWeather.weatherCurrentDescription,
+          currentWeather.weatherCurrentIcon,
+          currentWeather.weatherCurrentTemperature.metric.value,
+          currentWeather.weatherCurrentLocalObservationDateTime.toLocal(),
+        ),
+      );
     } catch (e, s) {
       debugPrint('Error: $e');
       debugPrintStack(stackTrace: s);

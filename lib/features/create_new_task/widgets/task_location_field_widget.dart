@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 
 import '../../../core/router/router.dart';
-import '../../location_search/data/models/location_details.dart';
+import '../../search_location/data/models/location_details.dart';
 
 class TaskLocationFieldWidget extends StatefulWidget {
   const TaskLocationFieldWidget({
@@ -23,7 +23,7 @@ class TaskLocationFieldWidget extends StatefulWidget {
 class _TaskLocationFieldWidgetState extends State<TaskLocationFieldWidget> {
   Future<void> _getLocationFromPreviousScreen() async {
     final result = await context.router.push<LocationDetailsModel>(
-      LocationSearchRoute(),
+      SearchLocationRoute(),
     );
     if (result != null) {
       widget.onLocationPicked(result);

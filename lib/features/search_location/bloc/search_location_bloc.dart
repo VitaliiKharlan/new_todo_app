@@ -8,9 +8,9 @@ import '../data/repositories/place_details_repository.dart';
 
 
 
-part 'location_search_event.dart';
+part 'search_location_event.dart';
 
-part 'location_search_state.dart';
+part 'search_location_state.dart';
 
 class LocationSearchBloc
     extends Bloc<LocationSearchEvent, LocationSearchState> {

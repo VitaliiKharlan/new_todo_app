@@ -51,3 +51,6 @@ git push -u main
 # (for example creating new branch by another user)
 
 git fetch
+
+# how to run prod/dev mode
+flutter run -t lib/main_prod.dart / flutter run -t lib/main_dev.dart
