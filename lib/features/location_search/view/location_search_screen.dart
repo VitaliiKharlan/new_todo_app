@@ -70,8 +70,8 @@ class _LocationSearchScreenState extends State<LocationSearchScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20),
                       child: Text(
-                        'Location Auto Complete',
-                        style: theme.textTheme.bodyMedium,
+                        'Search Location',
+                        style: theme.appBarTheme.titleTextStyle,
                       ),
                     ),
                   ),
@@ -171,32 +171,32 @@ class _LocationSearchScreenState extends State<LocationSearchScreen> {
                     },
                   ),
                 ),
-                Visibility(
-                  visible: controllerLocationSearch.text.isEmpty ? true : false,
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      top: 20,
-                      bottom: 20,
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.my_location,
-                            color: Color(0xFF4CAF50),
-                          ),
-                          SizedBox(width: 12),
-                          Text(
-                            'My Location',
-                            style: theme.textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Visibility(
+                //   visible: controllerLocationSearch.text.isEmpty ? true : false,
+                //   child: Container(
+                //     margin: EdgeInsets.only(
+                //       top: 20,
+                //       bottom: 20,
+                //     ),
+                //     child: ElevatedButton(
+                //       onPressed: () {},
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           Icon(
+                //             Icons.my_location,
+                //             color: Color(0xFF4CAF50),
+                //           ),
+                //           SizedBox(width: 12),
+                //           Text(
+                //             'My Location',
+                //             style: theme.textTheme.titleSmall,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

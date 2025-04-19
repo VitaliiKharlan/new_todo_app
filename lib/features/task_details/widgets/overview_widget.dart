@@ -45,9 +45,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    final description = widget.task.taskDescription?.trim();
-    if (description == null || description.isEmpty) return const SizedBox();
+    final description = widget.task.taskDescription?.trim() ?? '';
 
     return Container(
       width: double.infinity,
@@ -65,26 +63,25 @@ class _OverviewWidgetState extends State<OverviewWidget> {
           children: [
             Text('Overview', style: theme.textTheme.titleLarge),
             SizedBox(height: 8),
-            if (widget.task.taskDescription != null)
+            if (description.isNotEmpty)
               LayoutBuilder(
                 builder: (context, constraints) {
                   final textStyle =
                       theme.textTheme.bodySmall ?? const TextStyle();
-                  final fullText = description;
 
                   final textPainter = TextPainter(
-                    text: TextSpan(text: fullText, style: textStyle),
+                    text: TextSpan(text: description, style: textStyle),
                     maxLines: _maxLines,
                     textDirection: ui.TextDirection.ltr,
                   )..layout(maxWidth: constraints.maxWidth);
 
                   final bool isOverflowing = textPainter.didExceedMaxLines;
+                  String displayText = description;
 
-                  String displayText = fullText;
                   if (!_isExpanded && isOverflowing) {
                     // displayText = 'something new';
                     displayText = _getTrimmedText(
-                      text: fullText,
+                      text: description,
                       style: textStyle,
                       maxWidth: constraints.maxWidth,
                       maxLines: _maxLines,
@@ -116,7 +113,9 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                     ),
                   );
                 },
-              ),
+              )
+            else
+              Text('no description yet', style: theme.textTheme.titleSmall),
           ],
         ),
       ),

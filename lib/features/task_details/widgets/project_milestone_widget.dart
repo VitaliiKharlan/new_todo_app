@@ -33,9 +33,9 @@ class _ProjectMilestoneWidgetState extends State<ProjectMilestoneWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Project Milestone', style: theme.textTheme.titleLarge),
+            SizedBox(height: 12),
             if (widget.task.taskRemindTime != null &&
-                widget.task.taskRemindTime!.isNotEmpty) ...[
-              SizedBox(height: 12),
+                widget.task.taskRemindTime!.isNotEmpty)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
@@ -48,8 +48,12 @@ class _ProjectMilestoneWidgetState extends State<ProjectMilestoneWidget> {
                         ),
                       );
                     }).toList(),
+              )
+            else
+              Text(
+                'no milestones yet',
+                style: theme.textTheme.titleSmall,
               ),
-            ],
           ],
         ),
       ),

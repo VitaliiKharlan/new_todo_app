@@ -6,6 +6,7 @@ import '../../create_new_task/data/models/task_dto.dart';
 import '../widgets/main_information_widget.dart';
 import '../widgets/overview_widget.dart';
 import '../widgets/project_milestone_widget.dart';
+import '../widgets/weather_widget.dart';
 
 @RoutePage()
 class TaskDetailsScreen extends StatefulWidget {
@@ -90,8 +91,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               SizedBox(height: 20),
               OverviewWidget(task: widget.task),
               SizedBox(height: 20),
-              // WeatherWidget(task: widget.task),
-              // SizedBox(height: 20),
+              WeatherWidget(task: widget.task),
+              SizedBox(height: 20),
             ],
           ),
         ),

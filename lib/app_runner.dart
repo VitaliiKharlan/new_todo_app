@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -8,21 +7,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'firebase_options.dart';
 import 'new_todo_app.dart';
 
-
-Future<void> addDataToFirestore() async {
-  try {
-    // Пытаемся добавить данные в Firestore
-    await FirebaseFirestore.instance.collection('users').add({
-      'name': 'John Doe4',
-      'email': 'johndoe@example.com',
-    });
-    print('Data added to Firestore');
-  } catch (e) {
-    print('Error adding data to Firestore: $e');
-  }
-}
-
-void main() async {
+void appRunner() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -35,11 +20,11 @@ void main() async {
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<void> initNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
@@ -69,5 +54,3 @@ Future<void> _showNotification() async {
     platformDetails,
   );
 }
-
-

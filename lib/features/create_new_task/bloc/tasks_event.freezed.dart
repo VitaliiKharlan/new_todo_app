@@ -163,72 +163,6 @@ as List<DateTime>?,
 /// @nodoc
 
 
-class DeleteTaskEvent implements TasksEvent {
-  const DeleteTaskEvent({required this.taskDelete});
-  
-
- final  TaskDto taskDelete;
-
-/// Create a copy of TasksEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$DeleteTaskEventCopyWith<DeleteTaskEvent> get copyWith => _$DeleteTaskEventCopyWithImpl<DeleteTaskEvent>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeleteTaskEvent&&(identical(other.taskDelete, taskDelete) || other.taskDelete == taskDelete));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,taskDelete);
-
-@override
-String toString() {
-  return 'TasksEvent.deleteTask(taskDelete: $taskDelete)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $DeleteTaskEventCopyWith<$Res> implements $TasksEventCopyWith<$Res> {
-  factory $DeleteTaskEventCopyWith(DeleteTaskEvent value, $Res Function(DeleteTaskEvent) _then) = _$DeleteTaskEventCopyWithImpl;
-@useResult
-$Res call({
- TaskDto taskDelete
-});
-
-
-
-
-}
-/// @nodoc
-class _$DeleteTaskEventCopyWithImpl<$Res>
-    implements $DeleteTaskEventCopyWith<$Res> {
-  _$DeleteTaskEventCopyWithImpl(this._self, this._then);
-
-  final DeleteTaskEvent _self;
-  final $Res Function(DeleteTaskEvent) _then;
-
-/// Create a copy of TasksEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? taskDelete = null,}) {
-  return _then(DeleteTaskEvent(
-taskDelete: null == taskDelete ? _self.taskDelete : taskDelete // ignore: cast_nullable_to_non_nullable
-as TaskDto,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
 class EditTaskEvent implements TasksEvent {
   const EditTaskEvent({required this.oldTask, required this.taskTitle, required this.taskType, required this.taskPriority, required this.taskDeadline, required this.taskDescription, required this.taskLocation, required final  List<DateTime>? taskRemindTime}): _taskRemindTime = taskRemindTime;
   
@@ -308,6 +242,72 @@ as DateTime?,taskDescription: freezed == taskDescription ? _self.taskDescription
 as String?,taskLocation: freezed == taskLocation ? _self.taskLocation : taskLocation // ignore: cast_nullable_to_non_nullable
 as LocationDetailsModel?,taskRemindTime: freezed == taskRemindTime ? _self._taskRemindTime : taskRemindTime // ignore: cast_nullable_to_non_nullable
 as List<DateTime>?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DeleteTaskEvent implements TasksEvent {
+  const DeleteTaskEvent({required this.taskDelete});
+  
+
+ final  TaskDto taskDelete;
+
+/// Create a copy of TasksEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DeleteTaskEventCopyWith<DeleteTaskEvent> get copyWith => _$DeleteTaskEventCopyWithImpl<DeleteTaskEvent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeleteTaskEvent&&(identical(other.taskDelete, taskDelete) || other.taskDelete == taskDelete));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,taskDelete);
+
+@override
+String toString() {
+  return 'TasksEvent.deleteTask(taskDelete: $taskDelete)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DeleteTaskEventCopyWith<$Res> implements $TasksEventCopyWith<$Res> {
+  factory $DeleteTaskEventCopyWith(DeleteTaskEvent value, $Res Function(DeleteTaskEvent) _then) = _$DeleteTaskEventCopyWithImpl;
+@useResult
+$Res call({
+ TaskDto taskDelete
+});
+
+
+
+
+}
+/// @nodoc
+class _$DeleteTaskEventCopyWithImpl<$Res>
+    implements $DeleteTaskEventCopyWith<$Res> {
+  _$DeleteTaskEventCopyWithImpl(this._self, this._then);
+
+  final DeleteTaskEvent _self;
+  final $Res Function(DeleteTaskEvent) _then;
+
+/// Create a copy of TasksEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? taskDelete = null,}) {
+  return _then(DeleteTaskEvent(
+taskDelete: null == taskDelete ? _self.taskDelete : taskDelete // ignore: cast_nullable_to_non_nullable
+as TaskDto,
   ));
 }
 
