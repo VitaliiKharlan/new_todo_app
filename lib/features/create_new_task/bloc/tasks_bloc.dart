@@ -17,7 +17,8 @@ part 'tasks_state.dart';
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
   final TaskRepository taskRepository;
   List<TaskDto> _displayedTasks = [];
-  SortingOptionsEnum _currentSortingOption = SortingOptionsEnum.createAtLastToFirst;
+  SortingOptionsEnum _currentSortingOption =
+      SortingOptionsEnum.createAtLastToFirst;
 
   void _sortTasksByCurrentOption() {
     if (_currentSortingOption == SortingOptionsEnum.priorityHighToLow) {
@@ -32,13 +33,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         final priorityB = b.taskPriority ?? 0;
         return priorityB.compareTo(priorityA);
       });
-    } else if (_currentSortingOption == SortingOptionsEnum.createAtLastToFirst) {
+    } else if (_currentSortingOption ==
+        SortingOptionsEnum.createAtLastToFirst) {
       _displayedTasks.sort((a, b) {
         final taskCreateAtA = a.taskCreatedAt;
         final taskCreateAtB = b.taskCreatedAt;
         return taskCreateAtA.compareTo(taskCreateAtB);
       });
-    } else if (_currentSortingOption == SortingOptionsEnum.createAtFirstToLast) {
+    } else if (_currentSortingOption ==
+        SortingOptionsEnum.createAtFirstToLast) {
       _displayedTasks.sort((a, b) {
         final taskCreateAtA = a.taskCreatedAt;
         final taskCreateAtB = b.taskCreatedAt;
@@ -57,7 +60,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Future<void> _onLoadTasks(
-      LoadTasksEvent event, Emitter<TasksState> emit) async {
+    LoadTasksEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     try {
       debugPrint('Load Tasks Event');
 
@@ -85,7 +90,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   Future<void> _onAddTask(AddTaskEvent event, Emitter<TasksState> emit) async {
     try {
       debugPrint('Add Tasks Event');
-
       List<TaskDto> tasks = [];
       final newTask = TaskDto(
         taskId: Uuid().v4(),
@@ -97,6 +101,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         taskLocation: event.taskLocation,
         taskRemindTime: event.taskRemindTime,
       );
+
+      final taskMap = newTask.toMap()..['id'] = newTask.taskId;
+      await taskRepository.addTask(taskMap);
 
       if (state is TasksLoadedState) {
         final currentTasks = (state as TasksLoadedState).tasks;
@@ -111,7 +118,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }
 
       emit(TasksLoadedState(tasks));
-      await taskRepository.addTask(newTask.toMap());
     } catch (e, s) {
       debugPrint('Error: $e');
       debugPrintStack(stackTrace: s);
@@ -120,7 +126,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Future<void> _onDeleteTask(
-      DeleteTaskEvent event, Emitter<TasksState> emit) async {
+    DeleteTaskEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     try {
       debugPrint('Delete Tasks Event');
       await taskRepository.deleteTask(event.taskDelete.taskId);
@@ -129,7 +137,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         final currentTasks = (state as TasksLoadedState).tasks;
 
         final updatedTasks =
-        currentTasks.where((task) => task != event.taskDelete).toList();
+            currentTasks.where((task) => task != event.taskDelete).toList();
         _displayedTasks = updatedTasks;
 
         debugPrint('Task deleted: ${event.taskDelete}');
@@ -145,7 +153,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Future<void> _onEditTask(
-      EditTaskEvent event, Emitter<TasksState> emit) async {
+    EditTaskEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     try {
       debugPrint('Edit Tasks Event');
 
@@ -167,9 +177,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           updatedTask.toMap(),
         );
 
-        final updatedTasks = currentState.tasks.map((task) {
-          return task.taskId == event.oldTask.taskId ? updatedTask : task;
-        }).toList();
+        final updatedTasks =
+            currentState.tasks.map((task) {
+              return task.taskId == event.oldTask.taskId ? updatedTask : task;
+            }).toList();
 
         emit(TasksLoadedState(updatedTasks));
       }
@@ -181,7 +192,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Future<void> _onSearchTask(
-      SearchTaskEvent event, Emitter<TasksState> emit) async {
+    SearchTaskEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     try {
       if (state is TasksLoadedState) {
         final query = event.query.toLowerCase().trim();
@@ -189,11 +202,12 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         if (query.isEmpty) {
           emit(TasksLoadedState(_displayedTasks));
         } else {
-          final filteredTasks = _displayedTasks.where((task) {
-            final taskTitle = task.taskTitle.toLowerCase();
-            final words = taskTitle.split(' ');
-            return words.any((word) => word.startsWith(query));
-          }).toList();
+          final filteredTasks =
+              _displayedTasks.where((task) {
+                final taskTitle = task.taskTitle.toLowerCase();
+                final words = taskTitle.split(' ');
+                return words.any((word) => word.startsWith(query));
+              }).toList();
 
           emit(TasksLoadedState(filteredTasks));
         }
@@ -206,7 +220,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Future<void> _onSortTasks(
-      SortTasksEvent event, Emitter<TasksState> emit) async {
+    SortTasksEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     _currentSortingOption = event.sortingOption;
     _sortTasksByCurrentOption();
 
