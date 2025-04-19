@@ -10,6 +10,7 @@ import '../../../core/router/router.dart';
 import '../../../core/widgets/base_container.dart';
 import '../../../core/enums/task_types_enum.dart';
 import '../../create_new_task/bloc/tasks_bloc.dart';
+import '../../create_new_task/bloc/tasks_event.dart';
 import '../../create_new_task/data/models/task_dto.dart';
 
 class TaskListCardWidget extends StatefulWidget {
@@ -78,7 +79,7 @@ class _TaskListCardWidgetState extends State<TaskListCardWidget> {
           TaskDetailsRoute(
             task: widget.task,
             onDelete: (task) {
-              context.read<TasksBloc>().add(DeleteTaskEvent(task));
+              context.read<TasksBloc>().add(DeleteTaskEvent(taskDelete: task));
               context.router.maybePop();
             },
           ),

@@ -8,13 +8,13 @@ class TaskDto extends Equatable {
   TaskDto({
     required this.taskId,
     required this.taskTitle,
-    this.taskType,
-    this.taskPriority,
-    this.taskDeadline,
-    this.taskDescription,
-    this.taskLocation,
+    required this.taskType,
+    required this.taskPriority,
+    required this.taskDeadline,
+    required this.taskDescription,
+    required this.taskLocation,
     DateTime? createdAt,
-    this.taskRemindTime,
+    required this.taskRemindTime,
   }) : taskCreatedAt = createdAt ?? DateTime.now();
 
   final String taskId;
@@ -60,9 +60,10 @@ class TaskDto extends Equatable {
               : null,
       taskPriority:
           map['taskPriority'] != null ? map['taskPriority'] as int : null,
-      taskLocation: map['taskLocation'] != null
-          ? LocationDetailsModel.fromJson(map['taskLocation'])
-          : null,
+      taskLocation:
+          map['taskLocation'] != null
+              ? LocationDetailsModel.fromJson(map['taskLocation'])
+              : null,
       createdAt:
           map['taskCreatedAt'] != null
               ? DateTime.parse(map['taskCreatedAt'])
@@ -125,22 +126,27 @@ class TaskDto extends Equatable {
   }
 }
 
-// class TaskProgressIndicator {
-//   static double calculateProgress(
-//     DateTime taskCreatedAt,
-//     DateTime taskDeadline,
-//   ) {
-//     final DateTime now = DateTime.now();
+// import 'package:freezed_annotation/freezed_annotation.dart';
+// import '../../../../core/enums/task_types_enum.dart';
+// import '../../../location_search/data/models/location_details.dart';
 //
-//     if (now.isBefore(taskCreatedAt)) return 0.0;
-//     if (now.isAfter(taskDeadline)) return 100.0;
+// part 'task_dto.freezed.dart';
+// part 'task_dto.g.dart';
 //
-//     final Duration totalDuration = taskDeadline.difference(taskCreatedAt);
-//     final Duration elapsedDuration = now.difference(taskCreatedAt);
+// @freezed
+// class TaskDto with _$TaskDto {
+//   const factory TaskDto({
+//     required String taskId,
+//     required String taskTitle,
+//     TaskTypesEnum? taskType,
+//     int? taskPriority,
+//     DateTime? taskDeadline,
+//     String? taskDescription,
+//     LocationDetailsModel? taskLocation,
+//     List<DateTime>? taskRemindTime,
+//     @Default(DateTime.now()) DateTime taskCreatedAt,
+//   }) = _TaskDto;
 //
-//     double progress =
-//         (elapsedDuration.inMilliseconds / totalDuration.inMilliseconds) * 100;
-//
-//     return double.parse(progress.toStringAsFixed(2));
-//   }
+//   // factory TaskDto.fromJson(Map<String, dynamic> json) =>
+//   //     _$TaskDtoFromJson(json);
 // }

@@ -29,12 +29,15 @@ class CalendarRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [CreateNewTaskScreen]
 class CreateNewTaskRoute extends PageRouteInfo<CreateNewTaskRouteArgs> {
-  CreateNewTaskRoute({Key? key, TaskDto? editTask, List<PageRouteInfo>? children})
-    : super(
-        CreateNewTaskRoute.name,
-        args: CreateNewTaskRouteArgs(key: key, editTask: editTask),
-        initialChildren: children,
-      );
+  CreateNewTaskRoute({
+    Key? key,
+    TaskDto? editTask,
+    List<PageRouteInfo>? children,
+  }) : super(
+         CreateNewTaskRoute.name,
+         args: CreateNewTaskRouteArgs(key: key, editTask: editTask),
+         initialChildren: children,
+       );
 
   static const String name = 'CreateNewTaskRoute';
 

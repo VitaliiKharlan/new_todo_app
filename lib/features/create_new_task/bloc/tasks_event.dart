@@ -1,72 +1,42 @@
-part of 'tasks_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-@immutable
-sealed class TasksEvent {}
+import '../../../core/enums/sorting_options_enum.dart';
+import '../../../core/enums/task_types_enum.dart';
+import '../../location_search/data/models/location_details.dart';
+import '../data/models/task_dto.dart';
 
-class LoadTasksEvent extends TasksEvent {}
+part 'tasks_event.freezed.dart';
 
-class AddTaskEvent extends TasksEvent {
-  AddTaskEvent(
-      this.taskTitle,
-      this.taskType,
-      this.taskPriority,
-      this.taskDeadline,
-      this.taskDescription,
-      this.taskLocation,
-      this.taskRemindTime,
-      );
+@freezed
+class TasksEvent with _$TasksEvent {
+  const factory TasksEvent.loadTasks() = LoadTasksEvent;
 
-  final String taskTitle;
-  final TaskTypesEnum? taskType;
-  final int? taskPriority;
-  final DateTime? taskDeadline;
-  final String? taskDescription;
-  final LocationDetailsModel? taskLocation;
-  final List<DateTime>? taskRemindTime;
-}
+  const factory TasksEvent.addTask({
+    required String taskTitle,
+    required TaskTypesEnum? taskType,
+    required int? taskPriority,
+    required DateTime? taskDeadline,
+    required String? taskDescription,
+    required LocationDetailsModel? taskLocation,
+    required List<DateTime>? taskRemindTime,
+  }) = AddTaskEvent;
 
-class DeleteTaskEvent extends TasksEvent {
-  DeleteTaskEvent(
-      this.taskDelete,
-      );
+  const factory TasksEvent.editTask({
+    required TaskDto oldTask,
+    required String taskTitle,
+    required TaskTypesEnum? taskType,
+    required int? taskPriority,
+    required DateTime? taskDeadline,
+    required String? taskDescription,
+    required LocationDetailsModel? taskLocation,
+    required List<DateTime>? taskRemindTime,
+  }) = EditTaskEvent;
 
-  final TaskDto taskDelete;
-}
+  const factory TasksEvent.deleteTask({required TaskDto taskDelete}) =
+      DeleteTaskEvent;
 
-class EditTaskEvent extends TasksEvent {
-  EditTaskEvent({
-    required this.oldTask,
-    required this.taskTitle,
-    this.taskType,
-    this.taskPriority,
-    this.taskDeadline,
-    this.taskDescription,
-    this.taskLocation,
-    this.taskRemindTime,
-  });
+  const factory TasksEvent.searchTask(String query) = SearchTaskEvent;
 
-  final TaskDto oldTask;
-  final String taskTitle;
-  final TaskTypesEnum? taskType;
-  final int? taskPriority;
-  final DateTime? taskDeadline;
-  final String? taskDescription;
-  final LocationDetailsModel? taskLocation;
-  final List<DateTime>? taskRemindTime;
-}
-
-class SearchTaskEvent extends TasksEvent {
-  SearchTaskEvent(
-      this.query,
-      );
-
-  final String query;
-}
-
-class SortTasksEvent extends TasksEvent {
-  SortTasksEvent(
-      this.sortingOption,
-      );
-
-  final SortingOptionsEnum sortingOption;
+  const factory TasksEvent.sortTasks(SortingOptionsEnum sortingOption) =
+      SortTasksEvent;
 }

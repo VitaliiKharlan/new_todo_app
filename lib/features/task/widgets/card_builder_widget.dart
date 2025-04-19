@@ -6,6 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../core/router/router.dart';
 import '../../create_new_task/bloc/tasks_bloc.dart';
+import '../../create_new_task/bloc/tasks_event.dart';
 import '../../create_new_task/data/models/task_dto.dart';
 import 'task_list_card_widget.dart';
 
@@ -74,7 +75,7 @@ class CardBuilderWidget extends StatelessWidget {
                                 onPressed: () {
                                   dialogContext.router.maybePop();
                                   context.read<TasksBloc>().add(
-                                    DeleteTaskEvent(task),
+                                    DeleteTaskEvent(taskDelete: task),
                                   );
                                 },
                               ),

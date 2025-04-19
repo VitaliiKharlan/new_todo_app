@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/enums/task_types_enum.dart';
 import '../../location_search/data/models/location_details.dart';
 import '../bloc/tasks_bloc.dart';
+import '../bloc/tasks_event.dart';
 import '../data/models/task_dto.dart';
 import '../widgets/task_deadline_field_widget.dart';
 import '../widgets/task_description_field_widget.dart';
@@ -88,20 +89,20 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     if (widget.editTask == null) {
       // Create New Task
       bloc.add(
-        AddTaskEvent(
-          taskTitle,
-          taskType,
-          taskPriority,
-          taskDeadline,
-          taskDescription,
-          taskLocation,
-          taskRemindTime,
+        TasksEvent.addTask(
+          taskTitle:  taskTitle,
+          taskType:  taskType,
+          taskPriority:  taskPriority,
+          taskDeadline:  taskDeadline,
+          taskDescription: taskDescription,
+          taskLocation: taskLocation,
+          taskRemindTime:  taskRemindTime,
         ),
       );
     } else {
       // Edit Task
       bloc.add(
-        EditTaskEvent(
+        TasksEvent.editTask(
           oldTask: widget.editTask!,
           taskTitle: controllerTaskTitle.text.trim(),
           taskType: _selectedTaskType,

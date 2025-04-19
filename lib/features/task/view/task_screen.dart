@@ -6,6 +6,8 @@ import 'dart:ui';
 
 import '../../../core/theme/app_images.dart';
 import '../../create_new_task/bloc/tasks_bloc.dart';
+import '../../create_new_task/bloc/tasks_event.dart';
+import '../../create_new_task/bloc/tasks_state.dart';
 import '../widgets/card_builder_widget.dart';
 import '../widgets/menu_button_widget.dart';
 

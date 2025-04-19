@@ -4,12 +4,23 @@ import '../../../../core/constants/firestore_collections_constant.dart';
 import '../../../../core/services/logger_service.dart';
 import '../../../../core/services/notification_service.dart';
 
-class TaskRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+abstract class ITaskRepository {
+  Future<String> addTask(Map<String, dynamic> task);
 
+  Future<List<Map<String, dynamic>>> fetchTasks();
+
+  Future<void> updateTask(String id, Map<String, dynamic> task);
+
+  Future<void> deleteTask(String id);
+}
+
+class TaskRepository extends ITaskRepository {
+  final _firestore = FirebaseFirestore.instance;
+
+  @override
   Future<String> addTask(Map<String, dynamic> task) async {
     try {
-      final taskId = task['id'];
+      final taskId = task['taskId'];
 
       await _firestore
           .collection(FirestoreCollectionsConstant.tasks)
@@ -36,6 +47,7 @@ class TaskRepository {
     }
   }
 
+  @override
   Future<List<Map<String, dynamic>>> fetchTasks() async {
     try {
       final snapshot =
@@ -61,6 +73,7 @@ class TaskRepository {
     }
   }
 
+  @override
   Future<void> updateTask(String id, Map<String, dynamic> task) async {
     try {
       if (task['taskDeadline'] != null) {
@@ -99,6 +112,7 @@ class TaskRepository {
     }
   }
 
+  @override
   Future<void> deleteTask(String id) async {
     try {
       await _firestore

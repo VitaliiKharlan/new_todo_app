@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/router/router.dart';
 import '../../create_new_task/bloc/tasks_bloc.dart';
+import '../../create_new_task/bloc/tasks_event.dart';
 import '../../create_new_task/data/repositories/task_repository.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 
@@ -35,7 +36,7 @@ class HomeScreen extends StatelessWidget {
               create:
                   (context) =>
                       TasksBloc(taskRepository: taskRepository)
-                        ..add(LoadTasksEvent()),
+                        ..add(TasksEvent.loadTasks()),
             ),
           ],
           child: Scaffold(
