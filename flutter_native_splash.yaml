@@ -1,9 +1,12 @@
 flutter_native_splash:
   #  background_image: assets/background_28237.png
-  image: assets/native_splash_new_todo_app.png
   color: "#42FF00"
+  image: assets/native_splash_new_todo_app.png
+  fullscreen: true
 
   android_12:
     #    background_image: assets/background_28237.png
-    image: assets/native_splash_new_todo_app.png
     color: "#42FF00"
+    image: assets/native_splash_new_todo_app.png
+    icon_background_color: "#42FF00"
+    fullscreen: true
