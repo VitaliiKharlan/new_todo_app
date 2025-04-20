@@ -32,7 +32,11 @@ class _IndexScreenState extends State<IndexScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Center(
-          child: Text('TODO', style: theme.appBarTheme.titleTextStyle),
+          child: Text(
+            'TODO',
+            style: theme.appBarTheme.titleTextStyle,
+            textAlign: TextAlign.center,
+          ),
         ),
         leading: MenuButtonWidget(),
         actions: [
@@ -115,17 +119,13 @@ class _IndexScreenState extends State<IndexScreen> {
                                             Text(
                                               'No tasks available',
                                               style: theme.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                fontSize: 18,
-                                              ),
+                                                  ?.copyWith(fontSize: 18),
                                             ),
                                             SizedBox(height: 8),
                                             Text(
                                               'try looking for something else',
                                               style: theme.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                fontSize: 18,
-                                              ),
+                                                  ?.copyWith(fontSize: 18),
                                             ),
                                           ],
                                         ),
@@ -134,9 +134,7 @@ class _IndexScreenState extends State<IndexScreen> {
                                   );
                                 }
 
-                                return CardBuilderWidget(
-                                  tasks: tasks,
-                                );
+                                return CardBuilderWidget(tasks: tasks);
                               }
                               if (state is TasksDeletingFailureState) {
                                 return SliverFillRemaining(
@@ -155,7 +153,7 @@ class _IndexScreenState extends State<IndexScreen> {
                                   child: Center(
                                     child: Text(
                                       'Your task list is empty\n'
-                                          'Create a new task to get started',
+                                      'Create a new task to get started',
                                       textAlign: TextAlign.center,
                                       style: theme.textTheme.bodyMedium,
                                     ),
