@@ -1,4 +1,4 @@
-part of 'location_search_bloc.dart';
+part of 'search_location_bloc.dart';
 
 @immutable
 sealed class LocationSearchEvent {}

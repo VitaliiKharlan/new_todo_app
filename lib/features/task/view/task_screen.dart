@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:ui';
 
 import '../../../core/theme/app_images.dart';
-
+import '../../create_new_task/bloc/tasks_bloc.dart';
+import '../../create_new_task/bloc/tasks_event.dart';
+import '../../create_new_task/bloc/tasks_state.dart';
+import '../widgets/card_builder_widget.dart';
 import '../widgets/menu_button_widget.dart';
 
 @RoutePage()
@@ -29,7 +32,11 @@ class _IndexScreenState extends State<IndexScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Center(
-          child: Text('TODO', style: theme.appBarTheme.titleTextStyle),
+          child: Text(
+            'TODO',
+            style: theme.appBarTheme.titleTextStyle,
+            textAlign: TextAlign.center,
+          ),
         ),
         leading: MenuButtonWidget(),
         actions: [
@@ -66,7 +73,7 @@ class _IndexScreenState extends State<IndexScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(AppImages.backgroundImage, fit: BoxFit.cover),
+          Image.asset(AppImages.backgroundImage, fit: BoxFit.fill),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(color: Color(0x1A0000FF)),
@@ -76,9 +83,8 @@ class _IndexScreenState extends State<IndexScreen> {
               SizedBox(height: 24),
               _SearchTextField(
                 controller: searchController,
-
                 onChanged: (query) {
-                  // context.read<TasksBloc>().add(SearchTaskEvent(query));
+                  context.read<TasksBloc>().add(SearchTaskEvent(query));
                 },
               ),
               SizedBox(height: 24),
@@ -98,70 +104,64 @@ class _IndexScreenState extends State<IndexScreen> {
                         controller: scrollController,
                         physics: const BouncingScrollPhysics(),
                         slivers: [
-                          // BlocBuilder<TasksBloc, TasksState>(
-                          //   builder: (context, state) {
-                          //     if (state is TasksLoadedState) {
-                          //       final tasks = state.tasks;
-                          //
-                          //       if (tasks.isEmpty) {
-                          //         return SliverToBoxAdapter(
-                          //           child: Padding(
-                          //             padding: const EdgeInsets.only(top: 20),
-                          //             child: Center(
-                          //               child: Column(
-                          //                 children: [
-                          //                   Text(
-                          //                     'No tasks available',
-                          //                     style: theme.textTheme.bodyMedium
-                          //                         ?.copyWith(
-                          //                       fontSize: 18,
-                          //                     ),
-                          //                   ),
-                          //                   SizedBox(height: 8),
-                          //                   Text(
-                          //                     'try looking for something else',
-                          //                     style: theme.textTheme.bodyMedium
-                          //                         ?.copyWith(
-                          //                       fontSize: 18,
-                          //                     ),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         );
-                          //       }
-                          //
-                          //       return CardBuilderWidget(
-                          //         tasks: tasks,
-                          //       );
-                          //     }
-                          //     if (state is TasksDeletingFailureState) {
-                          //       return SliverFillRemaining(
-                          //         child: Center(
-                          //           child: Text(
-                          //             state.exception?.toString() ??
-                          //                 'something went wrong',
-                          //             style: theme.textTheme.bodyMedium,
-                          //           ),
-                          //         ),
-                          //       );
-                          //     }
-                          //     return SliverFillRemaining(
-                          //       child: Padding(
-                          //         padding: const EdgeInsets.only(bottom: 400),
-                          //         child: Center(
-                          //           child: Text(
-                          //             'Your task list is empty\n'
-                          //                 'Create a new task to get started',
-                          //             textAlign: TextAlign.center,
-                          //             style: theme.textTheme.bodyMedium,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
+                          BlocBuilder<TasksBloc, TasksState>(
+                            builder: (context, state) {
+                              if (state is TasksLoadedState) {
+                                final tasks = state.tasks;
+
+                                if (tasks.isEmpty) {
+                                  return SliverToBoxAdapter(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'No tasks available',
+                                              style: theme.textTheme.bodyMedium
+                                                  ?.copyWith(fontSize: 18),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text(
+                                              'try looking for something else',
+                                              style: theme.textTheme.bodyMedium
+                                                  ?.copyWith(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+
+                                return CardBuilderWidget(tasks: tasks);
+                              }
+                              if (state is TasksDeletingFailureState) {
+                                return SliverFillRemaining(
+                                  child: Center(
+                                    child: Text(
+                                      state.exception?.toString() ??
+                                          'something went wrong',
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                  ),
+                                );
+                              }
+                              return SliverFillRemaining(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 400),
+                                  child: Center(
+                                    child: Text(
+                                      'Your task list is empty\n'
+                                      'Create a new task to get started',
+                                      textAlign: TextAlign.center,
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),

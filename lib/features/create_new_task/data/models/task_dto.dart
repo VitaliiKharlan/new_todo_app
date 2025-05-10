@@ -1,18 +1,20 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/enums/task_types_enum.dart';
+import '../../../search_location/data/models/location_details.dart';
+import '../../widgets/task_progress_indicator.dart';
 
-class Task extends Equatable {
-  Task({
+class TaskDto extends Equatable {
+  TaskDto({
     required this.taskId,
     required this.taskTitle,
-    this.taskType,
-    this.taskPriority,
-    this.taskDeadline,
-    this.taskDescription,
-    // this.taskLocation,
+    required this.taskType,
+    required this.taskPriority,
+    required this.taskDeadline,
+    required this.taskDescription,
+    required this.taskLocation,
     DateTime? createdAt,
-    this.taskRemindTime,
+    required this.taskRemindTime,
   }) : taskCreatedAt = createdAt ?? DateTime.now();
 
   final String taskId;
@@ -21,15 +23,13 @@ class Task extends Equatable {
   final int? taskPriority;
   final DateTime? taskDeadline;
   final String? taskDescription;
-
-  // final LocationDetailsModel? taskLocation;
-
+  final LocationDetailsModel? taskLocation;
   final List<DateTime>? taskRemindTime;
   final DateTime taskCreatedAt;
 
   double get progress {
     if (taskDeadline == null) return 100;
-    double progress = TaskCurrentTimeProgressIndicator.calculateProgress(
+    double progress = TaskProgressIndicator.calculateProgress(
       taskCreatedAt,
       taskDeadline!,
     );
@@ -43,7 +43,7 @@ class Task extends Equatable {
       'taskDescription': taskDescription,
       'taskType': taskType?.name,
       'taskPriority': taskPriority,
-      // 'taskLocation': taskLocation?.toJson(),
+      'taskLocation': taskLocation?.toJson(),
       'taskCreatedAt': taskCreatedAt.toIso8601String(),
       'taskDeadline': taskDeadline?.toIso8601String(),
       'taskRemindTime':
@@ -51,8 +51,8 @@ class Task extends Equatable {
     };
   }
 
-  factory Task.fromMap(Map<String, dynamic> map) {
-    return Task(
+  factory TaskDto.fromMap(Map<String, dynamic> map) {
+    return TaskDto(
       taskTitle: map['taskTitle'],
       taskType:
           map['taskType'] != null
@@ -60,9 +60,10 @@ class Task extends Equatable {
               : null,
       taskPriority:
           map['taskPriority'] != null ? map['taskPriority'] as int : null,
-      // taskLocation: map['taskLocation'] != null
-      //     ? LocationDetailsModel.fromJson(map['taskLocation'])
-      //     : null,
+      taskLocation:
+          map['taskLocation'] != null
+              ? LocationDetailsModel.fromJson(map['taskLocation'])
+              : null,
       createdAt:
           map['taskCreatedAt'] != null
               ? DateTime.parse(map['taskCreatedAt'])
@@ -92,27 +93,27 @@ class Task extends Equatable {
     taskPriority,
     taskDeadline,
     taskDescription,
-    // taskLocation,
+    taskLocation,
   ];
 
-  Task copyWith({
+  TaskDto copyWith({
     String? taskId,
     String? taskTitle,
     String? taskDescription,
     TaskTypesEnum? taskType,
     int? taskPriority,
-    // LocationDetailsModel? taskLocation,
+    LocationDetailsModel? taskLocation,
     DateTime? taskDeadline,
     List<DateTime>? taskRemindTime,
     DateTime? taskCreatedAt,
   }) {
-    return Task(
+    return TaskDto(
       taskId: taskId ?? this.taskId,
       taskTitle: taskTitle ?? this.taskTitle,
       taskDescription: taskDescription ?? this.taskDescription,
       taskType: taskType ?? this.taskType,
       taskPriority: taskPriority ?? this.taskPriority,
-      // taskLocation: taskLocation ?? this.taskLocation,
+      taskLocation: taskLocation ?? this.taskLocation,
       taskDeadline: taskDeadline ?? this.taskDeadline,
       taskRemindTime: taskRemindTime ?? this.taskRemindTime,
       createdAt: taskCreatedAt ?? this.taskCreatedAt,
@@ -125,22 +126,27 @@ class Task extends Equatable {
   }
 }
 
-class TaskCurrentTimeProgressIndicator {
-  static double calculateProgress(
-    DateTime taskCreatedAt,
-    DateTime taskDeadline,
-  ) {
-    final DateTime now = DateTime.now();
-
-    if (now.isBefore(taskCreatedAt)) return 0.0;
-    if (now.isAfter(taskDeadline)) return 100.0;
-
-    final Duration totalDuration = taskDeadline.difference(taskCreatedAt);
-    final Duration elapsedDuration = now.difference(taskCreatedAt);
-
-    double progress =
-        (elapsedDuration.inMilliseconds / totalDuration.inMilliseconds) * 100;
-
-    return double.parse(progress.toStringAsFixed(2));
-  }
-}
+// import 'package:freezed_annotation/freezed_annotation.dart';
+// import '../../../../core/enums/task_types_enum.dart';
+// import '../../../location_search/data/models/location_details.dart';
+//
+// part 'task_dto.freezed.dart';
+// part 'task_dto.g.dart';
+//
+// @freezed
+// class TaskDto with _$TaskDto {
+//   const factory TaskDto({
+//     required String taskId,
+//     required String taskTitle,
+//     TaskTypesEnum? taskType,
+//     int? taskPriority,
+//     DateTime? taskDeadline,
+//     String? taskDescription,
+//     LocationDetailsModel? taskLocation,
+//     List<DateTime>? taskRemindTime,
+//     @Default(DateTime.now()) DateTime taskCreatedAt,
+//   }) = _TaskDto;
+//
+//   // factory TaskDto.fromJson(Map<String, dynamic> json) =>
+//   //     _$TaskDtoFromJson(json);
+// }

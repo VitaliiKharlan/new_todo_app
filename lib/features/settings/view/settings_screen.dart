@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 
+import '../../../core/theme/app_images.dart';
 import '../widgets/settings_action_card.dart';
 import '../widgets/settings_toggle_card.dart';
 
@@ -11,26 +13,46 @@ class CalendarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFFFFFF),
+        iconTheme: IconThemeData(color: Color(0xFF000000)),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        title: Center(
+          child: Text(
+            'Calendar',
+            style: theme.appBarTheme.titleTextStyle,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        flexibleSpace: ClipRect(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  AppImages.backgroundImage,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: kToolbarHeight,
+                ),
+              ),
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                  child: Container(color: Colors.black.withAlpha(30)),
+                ),
+              ),
+            ],
+          ),
+        ),
+        toolbarHeight: kToolbarHeight,
+      ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverAppBar(
-            pinned: true,
-            snap: true,
-            floating: true,
-            title: Center(
-              child: Text(
-                'Settings',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            elevation: 0,
-            surfaceTintColor: Colors.transparent,
-          ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
           SliverToBoxAdapter(
             child: SettingsToggleCard(

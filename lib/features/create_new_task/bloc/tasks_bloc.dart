@@ -1,25 +1,18 @@
-import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:new_todo_app/core/enums/sorting_options_enum.dart';
-import 'package:new_todo_app/core/enums/task_types_enum.dart';
-
 import 'package:uuid/uuid.dart';
 
-
-
-import '../data/models/task_entity.dart';
+import '../../../core/enums/sorting_options_enum.dart';
+import '../../../core/services/logger_service.dart';
+import '../../create_new_task/bloc/tasks_state.dart';
+import '../../create_new_task/bloc/tasks_event.dart';
+import '../data/models/task_dto.dart';
 import '../data/repositories/task_repository.dart';
 
-part 'tasks_event.dart';
-
-part 'tasks_state.dart';
-
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
-  final TaskRepository taskRepository;
-  List<Task> _displayedTasks = [];
-  SortingOptionsEnum _currentSortingOption = SortingOptionsEnum.createAtLastToFirst;
+  final ITaskRepository taskRepository;
+  List<TaskDto> _displayedTasks = [];
+  SortingOptionsEnum _currentSortingOption =
+      SortingOptionsEnum.createAtLastToFirst;
 
   void _sortTasksByCurrentOption() {
     if (_currentSortingOption == SortingOptionsEnum.priorityHighToLow) {
@@ -34,13 +27,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         final priorityB = b.taskPriority ?? 0;
         return priorityB.compareTo(priorityA);
       });
-    } else if (_currentSortingOption == SortingOptionsEnum.createAtLastToFirst) {
+    } else if (_currentSortingOption ==
+        SortingOptionsEnum.createAtLastToFirst) {
       _displayedTasks.sort((a, b) {
         final taskCreateAtA = a.taskCreatedAt;
         final taskCreateAtB = b.taskCreatedAt;
         return taskCreateAtA.compareTo(taskCreateAtB);
       });
-    } else if (_currentSortingOption == SortingOptionsEnum.createAtFirstToLast) {
+    } else if (_currentSortingOption ==
+        SortingOptionsEnum.createAtFirstToLast) {
       _displayedTasks.sort((a, b) {
         final taskCreateAtA = a.taskCreatedAt;
         final taskCreateAtB = b.taskCreatedAt;
@@ -59,51 +54,52 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Future<void> _onLoadTasks(
-      LoadTasksEvent event, Emitter<TasksState> emit) async {
+    LoadTasksEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     try {
-      debugPrint('Load Tasks Event');
+      logger.i('Load Tasks Event');
 
       final tasksData = await taskRepository.fetchTasks();
 
-      if (tasksData.isEmpty) {
-        debugPrint('No tasks found in the repository');
-      } else {
-        debugPrint('Fetched ${tasksData.length} tasks');
-      }
-
-      final tasks = tasksData.map((data) => Task.fromMap(data)).toList();
+      final tasks = tasksData.map((data) => TaskDto.fromMap(data)).toList();
       tasks.sort((a, b) => b.taskCreatedAt.compareTo(a.taskCreatedAt));
       _displayedTasks = tasks;
       _sortTasksByCurrentOption();
 
       emit(TasksLoadedState(tasks));
     } catch (e, s) {
-      debugPrint('Error: $e');
-      debugPrintStack(stackTrace: s);
-      emit(TasksLoadingFailureState(e.toString()));
+      logger.e(
+        'Unexpected error during loading tasks from Firestore',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
     }
   }
 
   Future<void> _onAddTask(AddTaskEvent event, Emitter<TasksState> emit) async {
     try {
-      debugPrint('Add Tasks Event');
+      logger.i('Add Task Event');
 
-      List<Task> tasks = [];
-      final newTask = Task(
+      List<TaskDto> tasks = [];
+      final newTask = TaskDto(
         taskId: Uuid().v4(),
         taskTitle: event.taskTitle,
         taskType: event.taskType,
         taskPriority: event.taskPriority,
         taskDeadline: event.taskDeadline,
         taskDescription: event.taskDescription,
-        // taskLocation: event.taskLocation,
+        taskLocation: event.taskLocation,
         taskRemindTime: event.taskRemindTime,
       );
+
+      final taskMap = newTask.toMap();
+      await taskRepository.addTask(taskMap);
 
       if (state is TasksLoadedState) {
         final currentTasks = (state as TasksLoadedState).tasks;
         tasks.addAll(currentTasks);
-        debugPrint('Loaded Tasks State');
       }
       tasks.add(newTask);
       _displayedTasks = tasks;
@@ -113,43 +109,22 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }
 
       emit(TasksLoadedState(tasks));
-      await taskRepository.addTask(newTask.toMap());
     } catch (e, s) {
-      debugPrint('Error: $e');
-      debugPrintStack(stackTrace: s);
-      emit(TasksDeletingFailureState(e.toString()));
-    }
-  }
-
-  Future<void> _onDeleteTask(
-      DeleteTaskEvent event, Emitter<TasksState> emit) async {
-    try {
-      debugPrint('Delete Tasks Event');
-      await taskRepository.deleteTask(event.taskDelete.taskId);
-
-      if (state is TasksLoadedState) {
-        final currentTasks = (state as TasksLoadedState).tasks;
-
-        final updatedTasks =
-        currentTasks.where((task) => task != event.taskDelete).toList();
-        _displayedTasks = updatedTasks;
-
-        debugPrint('Task deleted: ${event.taskDelete}');
-        emit(TasksLoadedState(updatedTasks));
-      } else {
-        debugPrint('No tasks to delete.');
-        emit(TasksDeletingFailureState('No tasks available to delete.'));
-      }
-    } catch (e, s) {
-      debugPrint('Error deleting task: $e $s');
-      emit(TasksDeletingFailureState(e.toString()));
+      logger.e(
+        'Unexpected error during adding new task to Firestore',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
     }
   }
 
   Future<void> _onEditTask(
-      EditTaskEvent event, Emitter<TasksState> emit) async {
+    EditTaskEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     try {
-      debugPrint('Edit Tasks Event');
+      logger.i('Edit Task Event');
 
       if (state is TasksLoadedState) {
         final currentState = state as TasksLoadedState;
@@ -160,7 +135,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           taskPriority: event.taskPriority,
           taskDeadline: event.taskDeadline,
           taskDescription: event.taskDescription,
-          // taskLocation: event.taskLocation,
+          taskLocation: event.taskLocation,
           taskRemindTime: event.taskRemindTime,
         );
 
@@ -169,51 +144,99 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           updatedTask.toMap(),
         );
 
-        final updatedTasks = currentState.tasks.map((task) {
-          return task.taskId == event.oldTask.taskId ? updatedTask : task;
-        }).toList();
+        final updatedTasks =
+            currentState.tasks.map((task) {
+              return task.taskId == event.oldTask.taskId ? updatedTask : task;
+            }).toList();
 
         emit(TasksLoadedState(updatedTasks));
       }
     } catch (e, s) {
-      debugPrint('Error: $e');
-      debugPrintStack(stackTrace: s);
-      emit(TasksEditingFailureState(e.toString()));
+      logger.e(
+        'Unexpected error during editing new task',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> _onDeleteTask(
+    DeleteTaskEvent event,
+    Emitter<TasksState> emit,
+  ) async {
+    try {
+      logger.i('Delete Task Event');
+      await taskRepository.deleteTask(event.taskDelete.taskId);
+
+      if (state is TasksLoadedState) {
+        final currentTasks = (state as TasksLoadedState).tasks;
+
+        final updatedTasks =
+            currentTasks.where((task) => task != event.taskDelete).toList();
+        _displayedTasks = updatedTasks;
+
+        emit(TasksLoadedState(updatedTasks));
+      } else {
+        emit(TasksDeletingFailureState('No tasks available to delete.'));
+      }
+    } catch (e, s) {
+      logger.e(
+        'Unexpected error during deleting task from Firestore',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
     }
   }
 
   Future<void> _onSearchTask(
-      SearchTaskEvent event, Emitter<TasksState> emit) async {
+    SearchTaskEvent event,
+    Emitter<TasksState> emit,
+  ) async {
     try {
+      logger.i('Search Task Event');
       if (state is TasksLoadedState) {
         final query = event.query.toLowerCase().trim();
 
         if (query.isEmpty) {
           emit(TasksLoadedState(_displayedTasks));
         } else {
-          final filteredTasks = _displayedTasks.where((task) {
-            final taskTitle = task.taskTitle.toLowerCase();
-            final words = taskTitle.split(' ');
-            return words.any((word) => word.startsWith(query));
-          }).toList();
+          final filteredTasks =
+              _displayedTasks.where((task) {
+                final taskTitle = task.taskTitle.toLowerCase();
+                final words = taskTitle.split(' ');
+                return words.any((word) => word.startsWith(query));
+              }).toList();
 
           emit(TasksLoadedState(filteredTasks));
         }
       }
     } catch (e, s) {
-      debugPrint('Error: $e');
-      debugPrintStack(stackTrace: s);
-      emit(TasksEditingFailureState(e.toString()));
+      logger.e(
+        'Unexpected error during searching task',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
     }
   }
 
   Future<void> _onSortTasks(
-      SortTasksEvent event, Emitter<TasksState> emit) async {
-    _currentSortingOption = event.sortingOption;
-    _sortTasksByCurrentOption();
+    SortTasksEvent event,
+    Emitter<TasksState> emit,
+  ) async {
+    try {
+      logger.i('Sort Tasks Event');
+      _currentSortingOption = event.sortingOption;
+      _sortTasksByCurrentOption();
 
-    if (state is TasksLoadedState) {
-      emit(TasksLoadedState(_displayedTasks));
+      if (state is TasksLoadedState) {
+        emit(TasksLoadedState(_displayedTasks));
+      }
+    } catch (e, s) {
+      logger.e('Unexpected error during sorting task', error: e, stackTrace: s);
+      rethrow;
     }
   }
 }

@@ -1,56 +1,23 @@
-part of 'tasks_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-@immutable
-sealed class TasksState extends Equatable {}
+import '../data/models/task_dto.dart';
 
-final class InitialTasksState extends TasksState {
-  @override
-  List<Object?> get props => [];
-}
+part 'tasks_state.freezed.dart';
 
-class AddNewTaskLoadingState extends TasksState {
-  @override
-  List<Object?> get props => [];
-}
+@freezed
+class TasksState with _$TasksState {
+  const factory TasksState.initial() = InitialTasksState;
 
-class TasksLoadedState extends TasksState {
-  TasksLoadedState(
-      this.tasks,
-      );
+  const factory TasksState.addNewTaskLoading() = AddNewTaskLoadingState;
 
-  final List<Task> tasks;
+  const factory TasksState.tasksLoaded(List<TaskDto> tasks) = TasksLoadedState;
 
-  @override
-  List<Object?> get props => [tasks];
-}
+  const factory TasksState.tasksLoadingFailure(Object? exception) =
+      TasksLoadingFailureState;
 
-class TasksLoadingFailureState extends TasksState {
-  TasksLoadingFailureState(
-      this.exception,
-      );
+  const factory TasksState.tasksDeletingFailure(Object? exception) =
+      TasksDeletingFailureState;
 
-  final Object? exception;
-
-  @override
-  List<Object?> get props => [exception];
-}
-
-class TasksDeletingFailureState extends TasksState {
-  TasksDeletingFailureState(
-      this.exception,
-      );
-
-  final Object? exception;
-
-  @override
-  List<Object?> get props => [exception];
-}
-
-class TasksEditingFailureState extends TasksState {
-  final Object? exception;
-
-  TasksEditingFailureState(this.exception);
-
-  @override
-  List<Object?> get props => [exception];
+  const factory TasksState.tasksEditingFailure(Object? exception) =
+      TasksEditingFailureState;
 }

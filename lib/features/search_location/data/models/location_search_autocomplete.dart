@@ -1,5 +1,5 @@
-class LocationSearchAutocompleteModel {
-  LocationSearchAutocompleteModel({
+class SearchLocationModel {
+  SearchLocationModel({
     required this.description,
     required this.placeId,
   });
@@ -7,8 +7,8 @@ class LocationSearchAutocompleteModel {
   final String description;
   final String placeId;
 
-  factory LocationSearchAutocompleteModel.fromJson(Map<String, dynamic> json) {
-    return LocationSearchAutocompleteModel(
+  factory SearchLocationModel.fromJson(Map<String, dynamic> json) {
+    return SearchLocationModel(
       description: json['description'] as String? ?? '',
       placeId: json['place_id'] as String? ?? '',
     );

@@ -8,6 +8,7 @@ class BaseContainer extends StatelessWidget {
     this.margin,
     this.padding = const EdgeInsets.only(left: 12),
     this.color,
+    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
     required this.child,
   });
 
@@ -16,11 +17,13 @@ class BaseContainer extends StatelessWidget {
   final EdgeInsets? margin;
   final EdgeInsets padding;
   final Color? color;
+  final BorderRadius borderRadius;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Container(
       height: height,
       width: width,
@@ -28,7 +31,7 @@ class BaseContainer extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: color ?? theme.cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: borderRadius,
       ),
       child: child,
     );

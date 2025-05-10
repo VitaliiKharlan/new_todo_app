@@ -3,18 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-
-
-import '../../create_new_task/data/models/task_entity.dart';
+import '../../../core/enums/task_types_enum.dart';
+import '../../create_new_task/data/models/task_dto.dart';
 import 'in_progress_indicator_widget.dart';
 
 class MainInformation extends StatefulWidget {
-  const MainInformation({
-    super.key,
-    required this.task,
-  });
+  const MainInformation({super.key, required this.task});
 
-  final Task task;
+  final TaskDto task;
 
   @override
   State<MainInformation> createState() => _MainInformationState();
@@ -30,54 +26,44 @@ class _MainInformationState extends State<MainInformation> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
+          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 12,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Main Information',
-              style: theme.textTheme.titleLarge,
-            ),
+            Text('Main Information', style: theme.textTheme.titleLarge),
             SizedBox(height: 12),
-            Text(
-              widget.task.taskTitle,
-              style: theme.textTheme.titleSmall,
-            ),
+            Text(widget.task.taskTitle, style: theme.textTheme.titleSmall),
             SizedBox(height: 20),
             Row(
               children: [
-                if (widget.task.taskType != null)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      color: Color(0x7039B7CD),
-                      height: 40,
-                      width: 40,
-                      child: Transform.scale(
-                        scale: 0.5,
-                        child: SvgPicture.asset(
-                          'assets/svg/${widget.task.taskType!.name}.svg',
-                          width: 20,
-                          height: 20,
-                          // colorFilter: ColorFilter.mode(
-                          //   widget.task.taskType!.color,
-                          //   BlendMode.srcIn,
-                          // ),
-                        ),
-                      ),
+                // if (widget.task.taskType != null)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    color: Color(0x7039B7CD),
+                    height: 40,
+                    width: 40,
+                    child: Transform.scale(
+                      scale: 0.5,
+                      child:
+                          widget.task.taskType != null
+                              ? SvgPicture.asset(
+                                'assets/svg/${widget.task.taskType!.name}.svg',
+                                width: 20,
+                                height: 20,
+                                colorFilter: ColorFilter.mode(
+                                  widget.task.taskType!.color,
+                                  BlendMode.srcIn,
+                                ),
+                              )
+                              : null,
                     ),
                   ),
+                ),
                 SizedBox(width: 8),
                 ClipOval(
                   child: Container(
@@ -95,13 +81,17 @@ class _MainInformationState extends State<MainInformation> {
                   ),
                 ),
                 SizedBox(width: 12),
-                if (widget.task.taskDeadline != null) ...[
-                  Text(
-                    DateFormat("dd MMMM, 'at' hh:mm a")
-                        .format(widget.task.taskDeadline!),
-                    style: theme.textTheme.titleSmall,
-                  ),
-                ]
+                widget.task.taskDeadline != null
+                    ? Text(
+                      DateFormat(
+                        "dd MMMM, 'at' hh:mm a",
+                      ).format(widget.task.taskDeadline!),
+                      style: theme.textTheme.titleSmall,
+                    )
+                    : Text(
+                      'no deadline yet',
+                      style: theme.textTheme.titleSmall,
+                    ),
               ],
             ),
             SizedBox(height: 32),
@@ -123,9 +113,7 @@ class _MainInformationState extends State<MainInformation> {
               ],
             ),
             SizedBox(height: 8),
-            InProgressIndicator(
-              progress: widget.task.progress,
-            ),
+            InProgressIndicator(progress: widget.task.progress),
             SizedBox(height: 32),
           ],
         ),

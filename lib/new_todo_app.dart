@@ -5,7 +5,6 @@ import 'core/cubits/theme_cubit/theme_cubit.dart';
 import 'core/router/router.dart';
 import 'core/theme/app_theme.dart';
 
-
 class NewTodoApp extends StatefulWidget {
   const NewTodoApp({super.key});
 
@@ -19,11 +18,7 @@ class _NewTodoAppState extends State<NewTodoApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => ThemeCubit(),
-        ),
-      ],
+      providers: [BlocProvider(create: (context) => ThemeCubit())],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp.router(

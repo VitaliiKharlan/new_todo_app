@@ -18,7 +18,7 @@ class PlaceDetailsRepository {
 
   var uuid = Uuid();
 
-  Future<List<LocationSearchAutocompleteModel>> _fetchLocationSuggestions(
+  Future<List<SearchLocationModel>> _fetchLocationSuggestions(
       String input) async {
     final String token = uuid.v4();
 
@@ -32,7 +32,7 @@ class PlaceDetailsRepository {
         final predictions = data['predictions'] as List<dynamic>? ?? [];
 
         return predictions
-            .map((json) => LocationSearchAutocompleteModel.fromJson(json))
+            .map((json) => SearchLocationModel.fromJson(json))
             .toList();
       } else {
         throw Exception('Failed to load locations');

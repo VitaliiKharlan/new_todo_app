@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
-import '../../features/create_new_task/data/models/task_entity.dart';
+import '../../features/create_new_task/data/models/task_dto.dart';
 import '../../features/create_new_task/view/create_new_task_screen.dart';
 import '../../features/focus/view/focus_screen.dart';
 import '../../features/home/view/home_screen.dart';
-import '../../features/location_search/view/location_search_screen.dart';
+
 import '../../features/profile/view/profile_screen.dart';
+import '../../features/search_location/view/search_location_screen.dart';
 import '../../features/settings/view/settings_screen.dart';
 import '../../features/task/view/task_screen.dart';
 import '../../features/task_details/view/task_details_screen.dart';
@@ -32,7 +33,7 @@ class AppRouter extends RootStackRouter {
           AutoRoute(page: CreateNewTaskRoute.page, path: 'edit_task'),
         ],
       ),
-      AutoRoute(page: LocationSearchRoute.page, path: '/location_search'),
+      AutoRoute(page: SearchLocationRoute.page, path: '/location_search'),
       AutoRoute(page: TaskDetailsRoute.page, path: '/task_details'),
     ];
   }

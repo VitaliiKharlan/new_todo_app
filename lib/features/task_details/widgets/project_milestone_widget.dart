@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
-import '../../create_new_task/data/models/task_entity.dart';
+import '../../create_new_task/data/models/task_dto.dart';
 
 class ProjectMilestoneWidget extends StatefulWidget {
   const ProjectMilestoneWidget({super.key, required this.task});
 
-  final Task task;
+  final TaskDto task;
 
   @override
   State<ProjectMilestoneWidget> createState() => _ProjectMilestoneWidgetState();
@@ -33,9 +33,9 @@ class _ProjectMilestoneWidgetState extends State<ProjectMilestoneWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Project Milestone', style: theme.textTheme.titleLarge),
+            SizedBox(height: 12),
             if (widget.task.taskRemindTime != null &&
-                widget.task.taskRemindTime!.isNotEmpty) ...[
-              SizedBox(height: 12),
+                widget.task.taskRemindTime!.isNotEmpty)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
@@ -48,8 +48,12 @@ class _ProjectMilestoneWidgetState extends State<ProjectMilestoneWidget> {
                         ),
                       );
                     }).toList(),
+              )
+            else
+              Text(
+                'no milestones yet',
+                style: theme.textTheme.titleSmall,
               ),
-            ],
           ],
         ),
       ),
